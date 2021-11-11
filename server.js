@@ -3,24 +3,25 @@ const express = require("express");
 const cors = require("cors");
 const app = express()
 const port = process.env.PORT || 8080;
-const sql = require("./connection")
-import { nanoid } from 'nanoid'
+const mongoose = require('mongoose');
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/newOrder", (req, res) => {
-    const id = nanoid()
-    const name = req.body.name
-    const contact = req.body.contact
-    const package = req.body.package
-    const deliveryDate = req.body.date
-    const deliveryTime = req.body.timeslot
-    const address = req.body.address
-    const promoCode = req.body.promoCod
-    // const amountPayable = req.
+const uri = process.env.ATLAS_URI;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }
+);
+
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
 })
+
+const packagesRouter = require('./routes/packages.js');
+
+app.use('/api/v1/packages', packagesRouter);
+
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

@@ -1,17 +1,35 @@
 const WizardScene = require("telegraf/scenes/wizard");
 const Composer = require("telegraf/composer");
+const { DISCOUNT }  = require("../enums");
 const { nanoid } = require('nanoid')
+const axios = require('axios');
+const {send_start_message} = require('../commonFunctions')
 
-const step1 = ctx => {
+const step1 = async ctx => {
     ctx.wizard.state.orders = []
-    send_start_message(ctx)
-    return ctx.wizard.next()
+    axios.get("http://localhost:8080/api/v1/packages/").then(res => {
+        const packagesData = res.data
+        send_start_message(ctx, packagesData)
+        // return ctx.wizard.next()
+    }).catch(err => {
+        console.log(err)
+    })
 } 
 
 const step2 = new Composer() 
 
-step2.hears(["Pahang Grade A MSW", "Red Prawn Ang Hei", "Package 1", "Package 2"], ctx => {
-    ctx.wizard.state.order = {package: ctx.match}
+step2.on('text', ctx => {
+    if (ctx.wizard.state.packagesSet.includes(ctx.message.text)) {
+        ctx.wizard.state.order = {
+            package: ctx.message.text
+        }
+        if (ctx.match.includes("Package")) {
+            ctx.wizard.state.order.size = "N.A."
+            selectQuantity(ctx)
+            return ctx.wizard.selectStep(3);
+        }
+    }
+    
     ctx.reply("Please choose a size (weight)", {
         reply_markup: {
             keyboard: [
@@ -33,6 +51,11 @@ const step3 = new Composer()
 
 step3.hears(["400g", "800g"], ctx => {
     ctx.wizard.state.order.size = ctx.match
+    selectQuantity(ctx)
+    return ctx.wizard.next() 
+})
+
+function selectQuantity(ctx) {
     ctx.reply("Please select your quantity", {
         reply_markup: {
             keyboard: [
@@ -51,8 +74,7 @@ step3.hears(["400g", "800g"], ctx => {
             one_time_keyboard: true
         }
     })
-    return ctx.wizard.next() 
-})
+}
 
 const step4 = new Composer() 
 
@@ -60,9 +82,8 @@ step4.hears(["1", "2", "3", "4", "5", "more"], ctx => {
     if (ctx.match !== "more") {
         ctx.wizard.state.order.quantity = ctx.match
         const currentOrder = ctx.wizard.state.order
-        ctx.wizard.state.price = 50
         ctx.wizard.state.orders.push(ctx.wizard.state.order)
-        ctx.reply(`You have selected ${currentOrder.package} (${currentOrder.size}) - ${currentOrder.quantity}, Would you like to order more?`, {
+        ctx.reply(`You have selected:\n\nPackage: ${currentOrder.package}\nSize: ${currentOrder.size}\nQty: ${currentOrder.quantity}\n\nWould you like to order more?`, {
             reply_markup: {
                 keyboard: [
                     [
@@ -115,14 +136,11 @@ step6.hears(["15-6-21", "17-6-21", "19-6-21"], ctx => {
         reply_markup: {
             keyboard: [
                 [
-                    { text: "1pm" }
+                    { text: "Normal Delivery: $10.00" }
                 ], 
                 [
-                    { text: "2pm" }
+                    { text: "Express Delivery (within 1hr): $13.50" }
                 ], 
-                [
-                    { text: "3pm" }
-                ]
             ],
             resize_keyboard: true,
             one_time_keyboard: true
@@ -133,7 +151,7 @@ step6.hears(["15-6-21", "17-6-21", "19-6-21"], ctx => {
 
 const step7 = new Composer() 
 
-step7.hears(["1pm", "2pm", "3pm"], ctx => {
+step7.hears(["Normal Delivery: $10.00", "Express Delivery (within 1hr): $13.50"], ctx => {
     ctx.wizard.state.timeslot = ctx.match
     ctx.reply("what is your contact number?")
     return ctx.wizard.next()
@@ -160,7 +178,8 @@ const step9 = new Composer()
 step9.on("text", ctx => {
     ctx.wizard.state.address = ctx.message.text
     let ordersMessage = ""
-        ctx.wizard.state.orders.map((order, idx) => {
+    
+    ctx.wizard.state.orders.map((order, idx) => {
             ordersMessage += `Item ${idx+1}\nPackage: ${order.package}\nSize: ${order.size}\nQuantity: ${order.quantity}\n\n`
     })
     ctx.reply(`${ctx.wizard.state.name}, please confirm the following details:\n\n${ordersMessage}Delivery Date: ${ctx.wizard.state.date}\nDelivery Time: ${ctx.wizard.state.timeslot}\nAddress: ${ctx.wizard.state.address}\nTotal Amount: ${ctx.wizard.state.price}\n\nDo you have a promo code?`, 
@@ -264,44 +283,6 @@ step14.hears(["Yes", "No"], ctx => {
     ctx.reply("I need some information from you. What is your name?")
     return ctx.wizard.selectStep(4)
 })
-
-function send_start_message(ctx) {
-    ctx.replyWithMediaGroup(
-        [
-            {
-                type: "photo", media: {source: "./assets/durian_1.jpg"}, caption: "durian 1"
-            },
-            {
-                type: "photo", media: {source: "./assets/durian_2.jpg"}, caption: "durian 2"
-            },
-            {
-                type: "photo", media: {source: "./assets/durian_3.jpg"}, caption: "durian 3"
-            }
-        ]).then((_) => {
-            const startMessage = "Welcome to Durian Head Bot, which package you want?"
-            ctx.reply(startMessage, {
-                reply_markup: {
-                    keyboard: [
-                        [
-                            { text: "Pahang Grade A MSW"}
-                        ],
-                        [
-                            { text: "Red Prawn Ang Hei"}
-                        ],
-                        [
-                            { text: "Package 1"}
-                        ], [
-                            { text: "Package 2"}
-                        ]
-                    ],
-                    resize_keyboard: true,
-                    one_time_keyboard: true
-                }
-            } )
-        }
-       
-    )
-}
 
 function send_payment_detials(ctx, is_promo) {
     const reference_code = nanoid() 
