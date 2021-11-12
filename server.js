@@ -18,9 +18,11 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-const packagesRouter = require('./routes/packages.js');
+const orderRouter = require('./routes/order.js');
+const shopRouter = require('./routes/shop.js');
 
-app.use('/api/v1/packages', packagesRouter);
+app.use('/api/v1/order', orderRouter);
+app.use('/api/v1/shop', shopRouter);
 
 
 app.listen(port, () => {
