@@ -3,8 +3,8 @@ const router = require('express').Router();
 let Order = require('../models/order.model');
 
 router.route('/').get((req, res) => {
-    Package.find()
-      .then(packages => res.json(packages))
+    Order.find()
+      .then(orders => res.json(orders))
       .catch(err => res.status(400).json('Error: ' + err));
   });
 
@@ -32,6 +32,20 @@ router.route('/newOrder').post((req, res) => {
   .then(() => res.json('Order added!'))
   .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.route('/paymentReceived/:id').post((req, res) => {
+  Order.findOneAndUpdate(
+    {_id: req.params.id},
+    {$set: {paymentReceived: true}}
+  ).then(() => res.json("Order updated!"))
+  .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/deleteOrder/:id').post((req, res) => {
+  Order.deleteOne({_id: req.params.id})
+  .then(() => res.json("Order deleted!"))
+  .catch(err => res.status(400).json('Error: ' + err));
+})
 
 
 module.exports = router;

@@ -63,7 +63,7 @@ function send_order_summary(ctx) {
 }
 
 function send_payment_details(ctx, is_promo, promo) {
-    const reference_code = nanoid() 
+    const reference_code = nanoid(10) 
     let congratulatory_message = ""
     let finalAmountPayable = ctx.wizard.state.amountPayable + ctx.wizard.state.deliveryFee
     if (is_promo) {
@@ -72,6 +72,7 @@ function send_payment_details(ctx, is_promo, promo) {
     }
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
     const finalOrder = {
+        orderId: reference_code,
         name: ctx.wizard.state.name,
         contact: parseInt(ctx.wizard.state.contact),
         address: ctx.wizard.state.address, 

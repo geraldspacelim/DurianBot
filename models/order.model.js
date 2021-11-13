@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const orderSchema = new Schema({
+    orderId: { type: String, required: true},
     name: { type: String, required: true},
     contact: {type: Number, required: true},
     address: {type: String, required: true}, 
@@ -11,7 +12,7 @@ const orderSchema = new Schema({
     orders: {type: Array, required: true}, 
     amountPayable: {type: Number, requird: true},
     promoCode: {type: String, required: true},
-    paymentRecieved: {type: Boolean, required: true, default: false}
+    paymentReceived: {type: Boolean, required: true, default: false}
   }, {
     minimize: false,
     timestamps: true,
