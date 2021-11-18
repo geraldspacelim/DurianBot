@@ -1,27 +1,22 @@
 import { useHistory } from "react-router-dom";
-import { FaCheck, FaPencilAlt, FaTrashAlt, FaTelegramPlane } from "react-icons/fa";
+import { FaCheck, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import '../index.css'
 
 const Order = ({order, deleteRecord, paymentReceived}) => { 
     const history = useHistory();
-    
-    const handleRowClick = () => {
-      history.push(`/invoice/${order.orderId}`);
-    }
     
     const convertDatetime = (dt) => {
         const d = new Date(dt)
         return d.toLocaleString()
     }
 
-    const editRecord = (e) => {
-        e.stopPropagation();
-        history.push(`/record/${order.orderId}`); 
+    const editRecord = () => {
+        history.push(`/editOrder/${order._id}`); 
     }
  
 
     return (
-            <tr onClick={handleRowClick}>
+            <tr>
                 <td className="col-md-1">{order.orderId}</td>
                 <td className="col-md-1">{order.name}</td>
                 <td className="col-md-1">{order.contact}</td>
@@ -43,7 +38,7 @@ const Order = ({order, deleteRecord, paymentReceived}) => {
                         <button
                             type="button"
                             className="btn btn-primary"
-                            onClick={FaTelegramPlane}
+                            onClick={editRecord}
                         > <FaPencilAlt  />
                         </button>
                         <button

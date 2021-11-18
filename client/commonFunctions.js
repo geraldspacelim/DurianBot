@@ -52,7 +52,7 @@ function send_order_summary(ctx) {
     const amountPayable = calculateAmountPayable(ctx.wizard.state.orders)
     ctx.wizard.state.amountPayable = amountPayable
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
-    ctx.reply(`${ctx.wizard.state.name}, please confirm the following details:\n\n${ordersMessage}Contact: ${ctx.wizard.state.contact}\nDelivery Option: ${ctx.wizard.state.deliveryOption}\nAddress: ${ctx.wizard.state.address}\nTotal Amount: $${amountPayable.toFixed(2)}\n\nDo you have a promo code?`, 
+    ctx.reply(`${ctx.wizard.state.name}, please confirm the following details:\n\n${ordersMessage}Contact: ${ctx.wizard.state.contact}\nEmail: ${ctx.wizard.state.email}\nDelivery Option: ${ctx.wizard.state.deliveryOption}\nAddress: ${ctx.wizard.state.address}\nTotal Amount: $${amountPayable.toFixed(2)}\n\nDo you have a promo code?`, 
     {
         reply_markup: {
             keyboard:keyboardGroup,
@@ -75,11 +75,12 @@ function send_payment_details(ctx, is_promo, promo) {
         orderId: reference_code,
         name: ctx.wizard.state.name,
         contact: parseInt(ctx.wizard.state.contact),
+        email: ctx.wizard.state.email,
         address: ctx.wizard.state.address, 
         deliveryOption: ctx.wizard.state.deliveryOption, 
         orders: ctx.wizard.state.orders,
         amountPayable:  parseFloat(finalAmountPayable),
-        promoCode: promo.code 
+        promoCode: promo === null ? "" : promo.code 
     }
     ctx.replyWithPhoto({
         source: "./assets/paylah.jpg"

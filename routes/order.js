@@ -10,6 +10,7 @@ router.route('/').get((req, res) => {
 
 
 router.route('/newOrder').post((req, res) => {
+  const orderId = req.body.orderId
   const name = req.body.name;
   const contact = req.body.contact
   const address = req.body.address
@@ -19,6 +20,7 @@ router.route('/newOrder').post((req, res) => {
   const promoCode = req.body.promoCode
 
   const newOrder = new Order({
+    orderId,
     name,
     contact,
     address,
@@ -46,6 +48,13 @@ router.route('/deleteOrder/:id').post((req, res) => {
   .then(() => res.json("Order deleted!"))
   .catch(err => res.status(400).json('Error: ' + err));
 })
+
+router.route('/getOrder/:id').get((req, res) => {
+  Order.findById(req.params.id)
+  .then(order => res.json(order))
+  .catch(err => res.status(400).json('Error: ' + err));
+})
+
 
 
 module.exports = router;

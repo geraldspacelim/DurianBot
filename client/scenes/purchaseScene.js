@@ -34,7 +34,7 @@ step2.on("text", ctx => {
             return ctx.wizard.selectStep(3);
         }
         const keyboardGroup = createKeyboardGroup(packageObj.details, "size")
-        ctx.reply("Please choose a size (weight)", {
+        ctx.reply("Please choose a size (g)", {
             reply_markup: {
                 keyboard: keyboardGroup,
                 resize_keyboard: true,
@@ -64,10 +64,10 @@ step4.hears(QTY_TYPES, ctx => {
     if (ctx.match !== "more") {
         ctx.wizard.state.order.quantity = parseInt(ctx.match) 
         additionalOrder(ctx)
-        return ctx.wizard.selectStep(12);
+        return ctx.wizard.selectStep(13);
     } else {
         ctx.reply("How many you want?")
-        return ctx.wizard.selectStep(11);
+        return ctx.wizard.selectStep(12);
     }
 })
 
@@ -100,7 +100,7 @@ step6.hears(DELIVERY_TYPES, ctx => {
     return ctx.wizard.next()
 })
 
-const step7 = new Composer() 
+const step7 = new Composer()
 
 step7.on("text", ctx => {
     const contactRegex = new RegExp(/^\d{8}$/);
@@ -112,34 +112,50 @@ step7.on("text", ctx => {
         return ctx.wizard.selectStep(currentStepIndex);
     }
     ctx.wizard.state.contact = ctx.message.text
-    ctx.reply("What is your address?")
+    ctx.reply("What is your email?")
     return ctx.wizard.next();
 })
 
 const step8 = new Composer() 
 
 step8.on("text", ctx => {
-    ctx.wizard.state.address = ctx.message.text
-    send_order_summary(ctx)
+    const emailRegex = new RegExp(/\S+@\S+\.\S+/);
+    if (!emailRegex.test(ctx.message.text)) {
+        const currentStepIndex = ctx.wizard.cursor;
+        ctx.reply(
+          "Please enter a valid email address."
+        );
+        return ctx.wizard.selectStep(currentStepIndex);
+    }
+    ctx.wizard.state.email = ctx.message.text
+    ctx.reply("What is your address?")
     return ctx.wizard.next();
 })
 
 const step9 = new Composer() 
 
-step9.hears(RADIO_TYPES, async ctx => {
+step9.on("text", ctx => {
+    ctx.wizard.state.address = ctx.message.text
+    send_order_summary(ctx)
+    return ctx.wizard.next();
+})
+
+const step10 = new Composer() 
+
+step10.hears(RADIO_TYPES, async ctx => {
     if (ctx.match === "Yes" ) {
         ctx.reply("Please enter your promo code")
         return ctx.wizard.next()
     } 
     const is_promo = false
-    const finalOrder =  send_payment_detials(ctx, is_promo, null)
+    const finalOrder =  send_payment_details(ctx, is_promo, null)
     await submitOrder(finalOrder)
-    return ctx.wizard.selectStep(11);
+    return ctx.wizard.selectStep(12);
 })
 
-const step10 = new Composer() 
+const step11 = new Composer() 
 
-step10.on("text", async ctx => {
+step11.on("text", async ctx => {
     const promo = ctx.wizard.state.promos.find(o => o.code === ctx.message.text)
     if (promo) {
         const is_promo = true
@@ -149,14 +165,14 @@ step10.on("text", async ctx => {
     } 
     ctx.reply("Wrong Promo Code").then((_) => {
         send_order_summary(ctx)
-        return ctx.wizard.selectStep(8);
+        return ctx.wizard.selectStep(9);
     }) 
    
 })
 
-const step11 = new Composer() 
+const step12 = new Composer() 
 
-step11.hears(RADIO_TYPES,  ctx => {
+step12.hears(RADIO_TYPES,  ctx => {
     if (ctx.match === "Yes") {
         send_start_message(ctx)
         return ctx.wizard.selectStep(1);
@@ -165,9 +181,9 @@ step11.hears(RADIO_TYPES,  ctx => {
     return ctx.scene.leave() 
 })
 
-const step12 = new Composer()
+const step13 = new Composer()
 
-step12.on("text", ctx => {
+step13.on("text", ctx => {
     if (isNaN(ctx.message.text)) {
         const currentStepIndex = ctx.wizard.cursor;
         ctx.reply(
@@ -180,9 +196,9 @@ step12.on("text", ctx => {
     return ctx.wizard.next();
 })
 
-const step13 = new Composer()
+const step14 = new Composer()
 
-step13.hears(RADIO_TYPES, ctx => {
+step14.hears(RADIO_TYPES, ctx => {
     if (ctx.match === "Yes") {
         ctx.wizard.state.order = {}
         send_start_message(ctx, ctx.wizard.state.packages)
@@ -208,6 +224,7 @@ const purchaseScene = new WizardScene(
                             step11,
                             step12,
                             step13,
+                            step14,
 );
 
 module.exports = {purchaseScene}

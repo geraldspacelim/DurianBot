@@ -11,7 +11,6 @@ const Home = () => {
     useEffect(() => {
         axios.get("http://localhost:8080/api/v1/order/")
             .then(res => {
-                console.log(res.data)
                 setOrders(res.data)
                 setIsLoading(false)
             }).catch(err => {
