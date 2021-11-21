@@ -1,11 +1,14 @@
-import {Modal, Form, ModalBody, ModalHeader, ModalTitle, Button} from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import {Modal, Button} from 'react-bootstrap';
+import { useState } from 'react';
 
-const AddOrderModal = ({handleClose, isShow, products}) => {
-    const [name, setName] = useState("")
-    const [sizes, setSizes] = useState([])
+
+const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
+    const [name, setName] = useState("-- select an option -- ")
+    const [currentPackage, setCurrentPackage] = useState(null)
     const [size, setSize] = useState(0)
-    const [quantity, setQuantity] = useState(0)
+    const [price, setPrice] = useState(0)
+    const [quantity, setQuantity] = useState(1)
+    const [enableOtherFields, setEnableOtherFields] = useState(true)
 
     return (
         <Modal
@@ -19,38 +22,54 @@ const AddOrderModal = ({handleClose, isShow, products}) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      <label>Name: </label>
           <div className="modal-select">
             <select
                 className="form-control"
                 id="exampleFormControlSelect1"
                 value={name}
                 onChange={(e) => {
-                    setName(e.target.value)
-                    const currObj = products.find(o => o.name === e.target.value);
-                    setSizes(currObj.details)
+                      setName(e.target.value)
+                      const currObj = products.find(o => o.name === e.target.value);
+                      setCurrentPackage(currObj)
+                      setEnableOtherFields(false)
                 }}
             >
-                {products.map((option, idx) => <option key={idx}>{option.name}</option>)}
+                  <option hidden >-- Select Option --</option>
+              {products.map((option, idx) => <option key={idx}>{option.name}</option>)}
             </select>
           </div>
-     
+          <div className="row">
+          <div className="col"> 
+          <label>Size: </label>
           <div className="modal-select">
             <select
+                disabled={enableOtherFields}
                 className="form-control"
                 id="exampleFormControlSelect1"
                 value={size}
                 onChange={(e) => {
+                  
                     if (e.target.value.includes("Package")) {
                         setSize("N.A.")
                     } else {
-                        setSize(e.target.value)}
-                    }}
+                        setSize(e.target.value)
+                      }
+                      setPrice(currentPackage.details[e.target.options.selectedIndex - 1].price)
+                    }
+                  }
             >
-                {sizes.map((option, idx) => <option key={idx}>{option.size}</option>)}
+                <option hidden >-- Select Option --</option>
+                {currentPackage && currentPackage.details.map((option, idx) => <option key={idx}>{option.size}</option>)}
             </select>
           </div>
+          </div>
+          <div className="col"> 
+          <label>Quantity: </label>
+
           <div className="modal-select">
              <input  type="number"
+                disabled={enableOtherFields}
                 min={1}
                 required
                 className="form-control"
@@ -58,9 +77,19 @@ const AddOrderModal = ({handleClose, isShow, products}) => {
                 onChange={(e) => setQuantity(e.target.value)}
                 />
           </div>
+          </div>
+          </div>
         </Modal.Body>
       <Modal.Footer>
         <Button onClick={handleClose}>Close</Button>
+        <Button onClick={(e) => {
+          const order = {
+            "package": name, 
+            "size": size, 
+            "quantity": quantity, 
+            "price": price
+          }
+          addToCart(e, order)}}>Save</Button>
       </Modal.Footer>
     </Modal>
     )

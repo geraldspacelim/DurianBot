@@ -2,6 +2,7 @@ import AddOrderModal from "./AddOrderModal"
 import { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Product from "./Product"
+import { FaSyncAlt } from "react-icons/fa";
 const axios = require('axios');
 
 const EditOrder = () => {
@@ -29,6 +30,7 @@ const EditOrder = () => {
                 setEmail(res.data.email)
                 setDeliveryOption(res.data.deliveryOption)
                 setOrders(res.data.orders)
+                setPromoCode(res.data.promoCode)
                 setAmountPayable(res.data.amountPayable)
                 axios.get(`http://localhost:8080/api/v1/shop/`)
                 .then(res => {
@@ -48,21 +50,43 @@ const EditOrder = () => {
         setOrders(tempCart)
     }
 
-    const addOrder = () => {
-        console.log("ad")
+    const addToCart = (e, order) => {
+        let tempCart = [...orders]
+        tempCart.push(order)
+        setOrders(tempCart)
+        setShow(false)
     }
 
     const calculateNewPayableAmt = () => {
-        console.log("test")
+        console.log(orders)
+        let newPayableAmount = 0
+        orders.map(o => {
+            newPayableAmount += (o.price * o.quantity)
+        })
+        const currPromo = promos.find(o => o.code === promoCode);
+        newPayableAmount *= (1 - (currPromo.discount/100))
+        const currDelivery  = deliveryOptions.find(o => o.mode === deliveryOption);
+        newPayableAmount += currDelivery.price
+        setAmountPayable(parseFloat(newPayableAmount))
     }
 
-    const submitChanges = () => {
-        // e.preventDefault()
-        // console.log("hi")
+    const submitChanges = (e) => {
+        e.preventDefault()
+        const data = {
+            "name": name,
+            "contact": contact,
+            "address": address, 
+            "deliveryOption": deliveryOption, 
+            "orders": orders, 
+            "amountPayable": amountPayable,
+            "promoCode": promoCode,
+            "email": email
+        }
+        axios.post("")
     }
 
     const handleClose = () => {
-        setShow(false )
+        setShow(false)
     }
 
     const handleOpen = () => {
@@ -71,7 +95,7 @@ const EditOrder = () => {
 
     return ( 
         <div className="container">
-        <AddOrderModal handleClose={handleClose} isShow={show} products={products}/>
+        <AddOrderModal handleClose={handleClose} isShow={show} products={products} addToCart={addToCart}/>
         <div className="loader" hidden={!isLoading}></div>
             {orders && <form>
                 <div className="form-group">
@@ -140,6 +164,14 @@ const EditOrder = () => {
                                 value={`${amountPayable.toFixed(2)}`}
                                 />
                         </div>
+                        <div className="col">
+                        <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={calculateNewPayableAmt}
+                        > <FaSyncAlt  />
+                        </button>
+                        </div>
                         <div className="col"> 
                             <label>Promo Code </label>
                             <select
@@ -158,7 +190,7 @@ const EditOrder = () => {
                     return (<Product order={order} products={products} key={idx} idx={idx} deleteOrder={deleteOrder} handleOpen={handleOpen}/>
                 )})}
                 <button type="button" 
-                onClick={submitChanges()}
+                onClick={(e) => submitChanges(e)}
                 value="Add Product"
                 className="btn btn-primary"
                 > Edit Order

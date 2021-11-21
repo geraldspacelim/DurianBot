@@ -55,6 +55,25 @@ router.route('/getOrder/:id').get((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 })
 
+router.route('/updateOrder/:id').post((req, res) => {
+  Order.findById(req.params.id)
+  .then(order => {
+    order.name = req.body.name
+    order.contact = req.body.contact 
+    order.address = req.body.address 
+    order.deliveryOption = req.body.deliveryOption
+    order.orders = req.body.orders
+    order.amountPayable = req.body.amountPayable
+    order.promoCode = req.body.promoCode
+    order.email = req.body.email
+  
+    order.save()
+      .then(() => res.json("order updated"))
+      .catch(err => res.status(400).json('Error: ' + err))
+  })
+  .catch(err => res.status(400).json('Error: ' + err));
+})
+
 
 
 module.exports = router;
