@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 
 const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
-    const [name, setName] = useState("-- select an option -- ")
+    const [name, setName] = useState("")
     const [currentPackage, setCurrentPackage] = useState(null)
     const [size, setSize] = useState(0)
     const [price, setPrice] = useState(0)
@@ -81,7 +81,13 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
           </div>
         </Modal.Body>
       <Modal.Footer>
-        <Button onClick={handleClose}>Close</Button>
+        <Button onClick={(e) => {
+          setName("")
+          setSize(0)
+          setQuantity(1)
+          setEnableOtherFields(true)
+          handleClose()
+        }}>Close</Button>
         <Button onClick={(e) => {
           const order = {
             "package": name, 
@@ -89,6 +95,10 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
             "quantity": quantity, 
             "price": price
           }
+          setName("")
+          setSize(0)
+          setQuantity(1)
+          setEnableOtherFields(true)
           addToCart(e, order)}}>Save</Button>
       </Modal.Footer>
     </Modal>

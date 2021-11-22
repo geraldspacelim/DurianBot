@@ -49,7 +49,7 @@ step2.on("text", ctx => {
 const step3 = new Composer() 
 
 step3.on("text", ctx => {
-    const package = ctx.wizard.state.selectedPackage.details.find(o => o.size === parseInt(ctx.message.text))
+    const package = ctx.wizard.state.selectedPackage.details.find(o => o.size === ctx.message.text)
     if (package) {
         ctx.wizard.state.order.size = package.size
         ctx.wizard.state.order.price = package.price

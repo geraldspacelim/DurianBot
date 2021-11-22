@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'; 
 import { FaMinus, FaPlus } from "react-icons/fa";
+import '../index.css'
 
 const Product = ({order, idx, products, deleteOrder, handleOpen}) => {
     return (  
         
-        <div className="row">
-            <div className="col"> 
+        <div className="row row-product">
+            <div className="col-4"> 
                 <input
                     className="form-control"
                     id="exampleFormControlSelect1"
@@ -14,7 +15,7 @@ const Product = ({order, idx, products, deleteOrder, handleOpen}) => {
                 >
                 </input>
                  </div>
-                 <div className="col">
+                 <div className="col-2">
                  <input
                         className="form-control"
                         id="exampleFormControlSelect1"
@@ -24,7 +25,7 @@ const Product = ({order, idx, products, deleteOrder, handleOpen}) => {
                     </input> 
                  </div>
                     
-                <div className="col"> 
+                <div className="col-2"> 
                  <input  type="number"
                     required
                     className="form-control"

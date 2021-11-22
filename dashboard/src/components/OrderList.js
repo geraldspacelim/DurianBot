@@ -43,7 +43,7 @@ const OrderList = ({orders, setRequestData}) => {
     }
 
     return ( 
-        <div className="blog-list">
+        <div className="order-list">
             {showAlert && <div className="alert alert-primary" role="alert">
                 {alert}
             </div>}

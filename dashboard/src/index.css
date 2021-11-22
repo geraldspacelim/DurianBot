@@ -62,3 +62,15 @@ td, tr {
   z-index:9999; 
   border-radius:0px
 }
+
+.form-group {
+  margin: 20px 20%
+}
+
+.refreshAmountPayable {
+  margin-top: 23px;
+}
+
+.row-product{
+  margin-bottom: 10px;
+}

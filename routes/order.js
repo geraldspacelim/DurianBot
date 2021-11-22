@@ -13,6 +13,7 @@ router.route('/newOrder').post((req, res) => {
   const orderId = req.body.orderId
   const name = req.body.name;
   const contact = req.body.contact
+  const email = req.body.email
   const address = req.body.address
   const deliveryOption = req.body.deliveryOption
   const orders = req.body.orders
@@ -23,6 +24,7 @@ router.route('/newOrder').post((req, res) => {
     orderId,
     name,
     contact,
+    email,
     address,
     deliveryOption,
     orders,

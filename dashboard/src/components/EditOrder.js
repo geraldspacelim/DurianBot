@@ -1,6 +1,6 @@
 import AddOrderModal from "./AddOrderModal"
 import { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useHistory  } from "react-router-dom";
 import Product from "./Product"
 import { FaSyncAlt } from "react-icons/fa";
 const axios = require('axios');
@@ -20,6 +20,7 @@ const EditOrder = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [deliveryOptions, setDeliveryOptions] = useState([])
     const [show, setShow] = useState(false)
+    const history = useHistory ();
     
     useEffect(() => {
         axios.get(`http://localhost:8080/api/v1/order/getOrder/${id}`)
@@ -45,9 +46,14 @@ const EditOrder = () => {
     },[])
 
     const deleteOrder = (e,idx) => {
-        let tempCart = [...orders]
-        tempCart.splice(idx, 1);
-        setOrders(tempCart)
+        if (orders.length == 1) {
+            alert("You must have at least 1 item in the cart")
+            return
+        } else if (window.confirm("Are you sure you want to delete this item ?")) {
+            let tempCart = [...orders]
+            tempCart.splice(idx, 1);
+            setOrders(tempCart)
+        }
     }
 
     const addToCart = (e, order) => {
@@ -58,7 +64,6 @@ const EditOrder = () => {
     }
 
     const calculateNewPayableAmt = () => {
-        console.log(orders)
         let newPayableAmount = 0
         orders.map(o => {
             newPayableAmount += (o.price * o.quantity)
@@ -72,6 +77,8 @@ const EditOrder = () => {
 
     const submitChanges = (e) => {
         e.preventDefault()
+        setIsLoading(true)
+        calculateNewPayableAmt()
         const data = {
             "name": name,
             "contact": contact,
@@ -82,7 +89,12 @@ const EditOrder = () => {
             "promoCode": promoCode,
             "email": email
         }
-        axios.post("")
+        axios.post(`http://localhost:8080/api/v1/order/updateOrder/${id}`, data)
+        .then(res => {
+            setIsLoading(false)
+            history.push ('/')
+        })
+        .catch(err => console.log(err))
     }
 
     const handleClose = () => {
@@ -156,23 +168,23 @@ const EditOrder = () => {
                 </div>
                 <div className="form-group">
                     <div className="row">
-                        <div className="col"> 
+                        <div className="col-sm-4"> 
                             <label>Amount Payble: </label>
                             <input  type="number"
                                 readOnly
                                 className="form-control"
-                                value={`${amountPayable.toFixed(2)}`}
+                                value={amountPayable.toFixed(2)}
                                 />
                         </div>
-                        <div className="col">
+                        <div className="col-sm-2">
                         <button
                             type="button"
-                            className="btn btn-primary"
+                            className="btn btn-primary refreshAmountPayable"
                             onClick={calculateNewPayableAmt}
                         > <FaSyncAlt  />
                         </button>
                         </div>
-                        <div className="col"> 
+                        <div className="col-sm-4"> 
                             <label>Promo Code </label>
                             <select
                             className="form-control"
@@ -186,15 +198,30 @@ const EditOrder = () => {
                 </div>
                
                 </div>
-                {orders.map((order, idx) => {
-                    return (<Product order={order} products={products} key={idx} idx={idx} deleteOrder={deleteOrder} handleOpen={handleOpen}/>
-                )})}
-                <button type="button" 
-                onClick={(e) => submitChanges(e)}
-                value="Add Product"
-                className="btn btn-primary"
-                > Edit Order
-                </button>
+                <div className="form-group"> 
+                    <div className="row">
+                        <div className="col-4">
+                        <label>Package:</label>
+                        </div>
+                        <div className="col-2">
+                        <label>Size:</label>
+                        </div>
+                        <div className="col-2">
+                        <label>Quantity:</label>
+                        </div>
+                    </div>
+                    {orders.map((order, idx) => {
+                        return (<Product order={order} products={products} key={idx} idx={idx} deleteOrder={deleteOrder} handleOpen={handleOpen}/>
+                    )})}
+                </div>
+                <div className="form-group"> 
+                    <button type="button" 
+                    onClick={(e) => submitChanges(e)}
+                    value="Add Product"
+                    className="btn btn-primary"
+                    > Submit Changes
+                    </button>
+                </div>
         </form>}
         </div>
      );
