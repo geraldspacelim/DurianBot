@@ -12,7 +12,6 @@ const ProductHome = () => {
         axios.get("http://localhost:8080/api/v1/shop/")
             .then(res => {
                 setProducts(res.data[0].products)
-                console.log(res.data[0].products)
                 setIsLoading(false)
             }).catch(err => {
                 console.log(err)

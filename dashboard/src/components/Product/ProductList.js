@@ -7,20 +7,24 @@ const PackageList  = ({products, setRequestData}) => {
     const [showAlert, setShowAlert] = useState(false)
     const [alert, setAlert] = useState("")
 
-    const deleteRecord = (e, _id) => {
+    const deleteProduct = (e, body) => {
         e.stopPropagation();
-        const answer = window.confirm("Would you like to delete order?");
+        const answer = window.confirm("Deleting this will delete its collection, continue?");
         if (answer) {
-            axios.delete(`https://swiftys-server.glitch.me/api/shop/`)
+            axios.delete(`https://swiftys-server.glitch.me/api/shop/deleteProduct`, body)
                 .then(res => {
                     setRequestData(new Date())
-                    setAlert("Record deleted successfully")
+                    setAlert("Product deleted successfully")
                     setShowAlert(true)
                     setTimeout(function() { setShowAlert(false) }, 2000);
                 }).catch(err => {
                     console.log(err)
                 })
         }
+    }
+
+    const addProduct = () => {
+        console.log("add product")
     }
 
     return (
@@ -40,7 +44,9 @@ const PackageList  = ({products, setRequestData}) => {
                 </thead>
                 <tbody>
                 {products.map((product, index) => (
-                    <ProductRow product={product} key={index} deleteRecord={deleteRecord}/>
+                    product.details.map((detail) => (
+                         <ProductRow product={product} detail={detail} deleteProduct={deleteProduct} addProduct={addProduct}/>
+                    ))
                 ))}
                 </tbody>
             </table>             

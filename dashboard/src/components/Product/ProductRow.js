@@ -1,27 +1,27 @@
 import { useState, useEffect } from 'react';
+import { FaPlus, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 const axios = require('axios');
 
-const ProductRow = ({product}) => {
-    
-    const {size, setSize} = useState(0)
-    const {price, setPrice} = useState(0)
-
+const ProductRow = ({product, detail, index, deleteProduct, addProduct}) => {
     return (
         <tr>
             <td className="col-md-2">{product.name}</td>
             <td className="col-md-2">{product.caption}</td>
-
+            <td className="col-md-2">{detail.size}</td>
+            <td className="col-md-2">${detail.price}</td>
             <td className="col-md-2">
-                <select
-                value={size}
-                onChange={(e) => setPrice(e.target.value)}
-            >
-                {product.details.map((option, idx) => <option key={idx}>{option.size}</option>)}
-            </select>
-            </td>
-            <td className="col-md-2">
-            <td className="col-md-2">{price}</td>
-
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={addProduct}
+                        > <FaPlus  />
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={(e) => {deleteProduct(e, {"name": product.name, "size": detail.size})}}
+                        > <FaTrashAlt  />
+                        </button>
             </td>
         </tr>
     )
