@@ -1,4 +1,5 @@
 import ProductRow from "./ProductRow"
+import AddProductModal from "./AddProductModal"
 import { useState, useEffect } from 'react';
 const axios = require('axios');
 
@@ -6,6 +7,7 @@ const PackageList  = ({products, setRequestData}) => {
     
     const [showAlert, setShowAlert] = useState(false)
     const [alert, setAlert] = useState("")
+    const [show, setShow] = useState(false)
 
     const deleteProduct = (e, body) => {
         e.stopPropagation();
@@ -27,11 +29,20 @@ const PackageList  = ({products, setRequestData}) => {
         console.log("add product")
     }
 
+    const handleClose = () => {
+        setShow(false)
+    }
+
+    const handleOpen = () => {
+        setShow(true)
+    }
+
     return (
         <div className="package-list">
             {showAlert && <div className="alert alert-primary" role="alert">
                 {alert}
             </div>}
+            <AddProductModal handleClose={handleClose} isShow={show} products={products} addProduct={addProduct}/>
             <table className="table table-hover">
                 <thead className="thead-light">
                     <tr>
@@ -45,7 +56,7 @@ const PackageList  = ({products, setRequestData}) => {
                 <tbody>
                 {products.map((product, index) => (
                     product.details.map((detail) => (
-                         <ProductRow product={product} detail={detail} deleteProduct={deleteProduct} addProduct={addProduct}/>
+                         <ProductRow product={product} detail={detail} deleteProduct={deleteProduct} handleOpen={handleOpen}/>
                     ))
                 ))}
                 </tbody>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaPlus, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 const axios = require('axios');
 
-const ProductRow = ({product, detail, index, deleteProduct, addProduct}) => {
+const ProductRow = ({product, detail, index, deleteProduct, handleOpen}) => {
     return (
         <tr>
             <td className="col-md-2">{product.name}</td>
@@ -13,7 +13,7 @@ const ProductRow = ({product, detail, index, deleteProduct, addProduct}) => {
                         <button
                             type="button"
                             className="btn btn-success"
-                            onClick={addProduct}
+                            onClick={handleOpen}
                         > <FaPlus  />
                         </button>
                         <button
