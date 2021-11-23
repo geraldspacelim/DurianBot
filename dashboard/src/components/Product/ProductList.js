@@ -1,5 +1,5 @@
 import ProductRow from "./ProductRow"
-import AddProductModal from "./AddProductModal"
+import AddProductModal from "./ProductModal"
 import { useState, useEffect } from 'react';
 const axios = require('axios');
 

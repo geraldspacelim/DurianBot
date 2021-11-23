@@ -12,7 +12,7 @@ const OrderList = ({orders, setRequestData}) => {
         e.stopPropagation();
         const answer = window.confirm("Would you like to delete order?");
         if (answer) {
-            axios.delete(`https://swiftys-server.glitch.me/api/orders/deleteOrder/${_id}`)
+            axios.post(`http://localhost:8080/api/v1/order/deleteOrder/${_id}`)
                 .then(res => {
                     setRequestData(new Date())
                     setAlert("Record deleted successfully")
