@@ -19,7 +19,7 @@ const ProductRow = ({product, detail, index, deleteProduct, handleOpen}) => {
                         <button
                             type="button"
                             className="btn btn-danger"
-                            onClick={(e) => {deleteProduct(e, {"name": product.name, "size": detail.size})}}
+                            onClick={(e) => {deleteProduct(e, {name : product.name})}}
                         > <FaTrashAlt  />
                         </button>
             </td>

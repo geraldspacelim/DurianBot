@@ -1,5 +1,6 @@
-import {Modal, Button, Form} from 'react-bootstrap';
+import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 import { useState } from 'react';
+import { FaPlus } from "react-icons/fa";
 
 
 const AddProductModal = ({handleClose, isShow, products, addProduct}) => {
@@ -22,33 +23,48 @@ const AddProductModal = ({handleClose, isShow, products, addProduct}) => {
       </Modal.Header>
       <Modal.Body>
           <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-                </Form.Text>
+            <Form.Group className="mb-3">
+                <Form.Label>Product Name</Form.Label>
+                <Form.Control type="text" placeholder="Enter Name" required/>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
+            <Form.Group className="mb-3">
+                <Form.Label>Image Source</Form.Label>
+                <Form.Control type="text" placeholder="Enter Souce" required/>
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-            </Form>
+
+            <Row className="mb-3">
+              <Form.Group as={Col}  md="5" controlId="formGridCity">
+                <Form.Label>Size (g/kg) </Form.Label>
+                <Form.Control />
+              </Form.Group>
+
+              <Form.Group as={Col} md="5" controlId="formGridState">
+                <Form.Label>Price ($)</Form.Label>
+                <Form.Select defaultValue="Choose...">
+                  <option>Choose...</option>
+                  <option>...</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridState">
+              <Form.Label>&nbsp;</Form.Label>
+                <Button style={{display:'block'}} variant="success"> <FaPlus /></Button>
+              </Form.Group>
+
+            </Row>
+            
+            <Modal.Footer>
+              <Button onClick={(e) => {
+                handleClose()
+              }}>Close</Button>
+              <Button variant="primary" type="submit">
+                      Submit
+                  </Button>
+          </Modal.Footer>
+          </Form>
         </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={(e) => {
-          handleClose()
-        }}>Close</Button>
-        <Button onClick={(e) => {
-          addProduct(e)}}>Save</Button>
-      </Modal.Footer>
+      
     </Modal>
     )
 }

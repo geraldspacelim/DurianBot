@@ -9,7 +9,6 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/newShop').post((req, res) => {
-    console.log("here")
     const name = req.body.name;
     const promos = req.body.promos
     const products = req.body.products
@@ -24,6 +23,14 @@ router.route('/newShop').post((req, res) => {
     .then(() => res.json('Shop added!'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
+router.route('/deleteProductCollection/:id').post((req, res) => {
+    Shop.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$pull: {name: req.body.name}}
+    ).then(() => res.json("Order updated!"))
+    .catch(err => res.status(400).json('Error: ' + err));
+})
 
 module.exports = router;
 

@@ -3,7 +3,7 @@ import AddProductModal from "./AddProductModal"
 import { useState, useEffect } from 'react';
 const axios = require('axios');
 
-const PackageList  = ({products, setRequestData}) => {
+const PackageList  = ({products, setRequestData, _id}) => {
     
     const [showAlert, setShowAlert] = useState(false)
     const [alert, setAlert] = useState("")
@@ -13,7 +13,7 @@ const PackageList  = ({products, setRequestData}) => {
         e.stopPropagation();
         const answer = window.confirm("Deleting this will delete its collection, continue?");
         if (answer) {
-            axios.delete(`https://swiftys-server.glitch.me/api/shop/deleteProduct`, body)
+            axios.post(`http://localhost:8080/api/v1/shop/deleteProductCollection/` + _id, body)
                 .then(res => {
                     setRequestData(new Date())
                     setAlert("Product deleted successfully")

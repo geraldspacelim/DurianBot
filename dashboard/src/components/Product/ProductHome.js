@@ -5,6 +5,7 @@ const axios = require('axios');
 
 const ProductHome = () => {
     const [products, setProducts] = useState(null)
+    const [_id, set_id] = useState("")
     const [isLoading, setIsLoading] = useState(true);
     const [requestData, setRequestData] = useState(new Date())
     
@@ -12,6 +13,7 @@ const ProductHome = () => {
         axios.get("http://localhost:8080/api/v1/shop/")
             .then(res => {
                 setProducts(res.data[0].products)
+                set_id(res.data[0]._id)
                 setIsLoading(false)
             }).catch(err => {
                 console.log(err)
@@ -21,7 +23,7 @@ const ProductHome = () => {
     return ( 
         <div className="home">
             <div className="loader" hidden={!isLoading}></div>
-            {products && <ProductList products={products} setRequestData={setRequestData}/>}
+            {products && <ProductList products={products} setRequestData={setRequestData} _id={_id}/>}
         </div>
      );
 }
