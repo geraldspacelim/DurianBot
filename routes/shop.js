@@ -27,8 +27,32 @@ router.route('/newShop').post((req, res) => {
 router.route('/deleteProductCollection/:id').post((req, res) => {
     Shop.findByIdAndUpdate(
         {_id: req.params.id},
-        {$pull: {name: req.body.name}}
-    ).then(() => res.json("Order updated!"))
+        {$pull: {products: {name: req.body.name}}}
+    ).then(() => res.json("Shop updated!"))
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/newProductCollection/:id').post((req, res) => {
+    Shop.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$push: {products: req.body}}
+    ).then(() => res.json("Shop updated!"))
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/deletePromo/:id').post((req, res) => {
+    Shop.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$pull: {promos: {code: req.body.code}}}
+    ).then(() => res.json("Shop updated!"))
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
+router.route('/addPromo/:id').post((req, res) => {
+    Shop.findByIdAndUpdate(
+        {_id: req.params.id},
+        {$push: {promos: req.body}}
+    ).then(() => res.json("Shop updated!"))
     .catch(err => res.status(400).json('Error: ' + err));
 })
 

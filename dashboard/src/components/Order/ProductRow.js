@@ -1,8 +1,7 @@
-import { Link } from 'react-router-dom'; 
 import { FaMinus, FaPlus } from "react-icons/fa";
-import '../index.css'
+import '../../index.css'
 
-const Product = ({order, idx, products, deleteOrder, handleOpen}) => {
+const ProductRow = ({order, idx, products, deleteOrder, handleOpen}) => {
     return (  
         
         <div className="row row-product">
@@ -52,4 +51,4 @@ const Product = ({order, idx, products, deleteOrder, handleOpen}) => {
     );
 }
  
-export default Product;
+export default ProductRow;

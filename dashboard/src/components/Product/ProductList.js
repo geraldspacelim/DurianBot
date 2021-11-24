@@ -25,10 +25,6 @@ const PackageList  = ({products, setRequestData, _id}) => {
         }
     }
 
-    const addProduct = () => {
-        console.log("add product")
-    }
-
     const handleClose = () => {
         setShow(false)
     }
@@ -42,7 +38,7 @@ const PackageList  = ({products, setRequestData, _id}) => {
             {showAlert && <div className="alert alert-primary" role="alert">
                 {alert}
             </div>}
-            <AddProductModal handleClose={handleClose} isShow={show} products={products} addProduct={addProduct}/>
+            <AddProductModal handleClose={handleClose} isShow={show} products={products} _id={_id}/>
             <table className="table table-hover">
                 <thead className="thead-light">
                     <tr>

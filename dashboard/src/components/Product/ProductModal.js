@@ -5,7 +5,7 @@ import ProductSize from './ProductSize';
 import "../../index.css"
 const axios = require('axios');
 
-const AddProductModal = ({handleClose, isShow}) => {
+const AddProductModal = ({handleClose, isShow, _id}) => {
     const [name, setName] = useState("")
     const [details, setDetails] = useState([{size: 0, price: 0}])
     const [source, setSource] = useState("")
@@ -14,7 +14,10 @@ const AddProductModal = ({handleClose, isShow}) => {
 
     const updateDetails = (e, type, idx) => {
       let tempDetails = [...details]
-      tempDetails[idx][type] = parseInt(e)
+      if (type === "price") {
+        e = parseInt(e)
+      } 
+      tempDetails[idx][type] = e
       setDetails(tempDetails)
     }
 
@@ -26,18 +29,21 @@ const AddProductModal = ({handleClose, isShow}) => {
 
     const addProduct = (e) => {
       e.preventDefault()
-      setIsLoading(true)
-      const body = {
-        name: name,
-        source, source,
-        details: details
-      }
-      axios.post("http://localhost:8080/api/v1/shop/addProducts", body).then(res => {
-        setIsLoading(false)
-        history.push ('/productHome')
-      }).catch(err  => {
-        console.log(err)
-      })
+      if (window.confirm('Confirm add new product?')) {
+        setIsLoading(true)
+        const body = {
+          name: name,
+          caption: name,
+          source, source,
+          details: details
+        }
+        axios.post("http://localhost:8080/api/v1/shop/newProductCollection/" + _id, body).then(res => {
+          setIsLoading(true)
+          history.push ('/productHome')
+        }).catch(err  => {
+          console.log(err)
+        })  
+      } 
     }
 
     return (
@@ -47,14 +53,13 @@ const AddProductModal = ({handleClose, isShow}) => {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <div className="loader" hidden={!isLoading}></div>
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           Add Product
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-          <Form>
+          <Form onSubmit={addProduct}>
             <Form.Group className="mb-3">
                 <Form.Label>Product Name</Form.Label>
                 <Form.Control type="text" placeholder="Enter Name" required 
@@ -73,23 +78,22 @@ const AddProductModal = ({handleClose, isShow}) => {
 
 
             {details.map((d, idx) => (
-              <ProductSize d={d} idx={idx} updateDetails={updateDetails} addDetails={addDetails}/>
+              <ProductSize d={d} idx={idx} key={idx} updateDetails={updateDetails} addDetails={addDetails}/>
             ))}
-            
-            <Modal.Footer>
-              <Button variant="danger" onClick={(e) => {
+
+          <Modal.Footer/>
+          <Button variant="danger" onClick={(e) => {
                 setName("")
                 setSource("")
                 setDetails([{size: 0, price: 0}])
                 handleClose()
               }}>Close</Button>
-              <Button variant="primary" type="submit" disabled={isLoading}>
-                      Submit
-                  </Button>
-          </Modal.Footer>
+              <Button variant="primary" type="submit" disabled={isLoading} >
+                Submit
+              </Button>
           </Form>
         </Modal.Body>
-      
+       
     </Modal>
     )
 }

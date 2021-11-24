@@ -1,5 +1,5 @@
-import Order from "./Order"
-import '../index.css'
+import OrderRow from "./OrderRow"
+import '../../index.css'
 import { useState } from 'react';
 const axios = require('axios');
 
@@ -64,7 +64,7 @@ const OrderList = ({orders, setRequestData}) => {
                 </thead>
                 <tbody>
                 {orders.map((order) => (
-                    <Order order={order} key={order._id} deleteRecord={deleteRecord} paymentReceived={paymentReceived}/>
+                    <OrderRow order={order} key={order._id} deleteRecord={deleteRecord} paymentReceived={paymentReceived}/>
                 ))}
                 </tbody>
             </table>             

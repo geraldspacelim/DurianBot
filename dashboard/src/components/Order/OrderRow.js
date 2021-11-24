@@ -1,8 +1,8 @@
 import { useHistory } from "react-router-dom";
 import { FaCheck, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
-import '../index.css'
+import '../../index.css'
 
-const Order = ({order, deleteRecord, paymentReceived}) => { 
+const OrderRow = ({order, deleteRecord, paymentReceived}) => { 
     const history = useHistory();
     
     const convertDatetime = (dt) => {
@@ -52,4 +52,4 @@ const Order = ({order, deleteRecord, paymentReceived}) => {
      );
 }
  
-export default Order;
+export default OrderRow;

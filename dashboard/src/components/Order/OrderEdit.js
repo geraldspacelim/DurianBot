@@ -1,11 +1,12 @@
-import AddOrderModal from "./AddOrderModal"
+import OrderModal from "./OrderModal"
 import { useState, useEffect } from 'react';
 import { useParams, useHistory  } from "react-router-dom";
-import Product from "./Product"
+import Product from "./ProductRow"
 import { FaSyncAlt } from "react-icons/fa";
+import "../../index.css"
 const axios = require('axios');
 
-const EditOrder = () => {
+const OrderEdit = () => {
     const { id } = useParams();
     const [name, setName] = useState("")
     const [contact, setContact] = useState(0)
@@ -56,7 +57,7 @@ const EditOrder = () => {
         }
     }
 
-    const addToCart = (e, order) => {
+    const addToCart = (order) => {
         let tempCart = [...orders]
         tempCart.push(order)
         setOrders(tempCart)
@@ -72,29 +73,32 @@ const EditOrder = () => {
         newPayableAmount *= (1 - (currPromo.discount/100))
         const currDelivery  = deliveryOptions.find(o => o.mode === deliveryOption);
         newPayableAmount += currDelivery.price
-        setAmountPayable(parseFloat(newPayableAmount))
+        return parseFloat(newPayableAmount) 
     }
 
     const submitChanges = (e) => {
         e.preventDefault()
-        setIsLoading(true)
-        calculateNewPayableAmt()
-        const data = {
-            "name": name,
-            "contact": contact,
-            "address": address, 
-            "deliveryOption": deliveryOption, 
-            "orders": orders, 
-            "amountPayable": amountPayable,
-            "promoCode": promoCode,
-            "email": email
+        if (window.confirm("Do you want to submit changes?")) {
+            setIsLoading(true)
+            const amountPayable = calculateNewPayableAmt()
+            const data = {
+                "name": name,
+                "contact": contact,
+                "address": address, 
+                "deliveryOption": deliveryOption, 
+                "orders": orders, 
+                "amountPayable": amountPayable,
+                "promoCode": promoCode,
+                "email": email
+            }
+            axios.post(`http://localhost:8080/api/v1/order/updateOrder/${id}`, data)
+            .then(res => {
+                setIsLoading(false)
+                history.push ('/')
+            })
+            .catch(err => console.log(err))
         }
-        axios.post(`http://localhost:8080/api/v1/order/updateOrder/${id}`, data)
-        .then(res => {
-            setIsLoading(false)
-            history.push ('/')
-        })
-        .catch(err => console.log(err))
+        
     }
 
     const handleClose = () => {
@@ -107,7 +111,7 @@ const EditOrder = () => {
 
     return ( 
         <div className="container">
-        <AddOrderModal handleClose={handleClose} isShow={show} products={products} addToCart={addToCart}/>
+        <OrderModal handleClose={handleClose} isShow={show} products={products} addToCart={addToCart}/>
         <div className="loader" hidden={!isLoading}></div>
             {orders && <form>
                 <div className="form-group">
@@ -170,17 +174,24 @@ const EditOrder = () => {
                     <div className="row">
                         <div className="col-sm-4"> 
                             <label>Amount Payble: </label>
-                            <input  type="number"
+  
+                            <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input  type="number"
                                 readOnly
                                 className="form-control"
                                 value={amountPayable.toFixed(2)}
-                                />
+                                />                        </div>
                         </div>
                         <div className="col-sm-2">
+                        <label>&nbsp;</label>
                         <button
+                            style={{display:'block'}}
                             type="button"
                             className="btn btn-primary refreshAmountPayable"
-                            onClick={calculateNewPayableAmt}
+                            onClick={() => {const amountPayable = calculateNewPayableAmt()}}
                         > <FaSyncAlt  />
                         </button>
                         </div>
@@ -218,7 +229,7 @@ const EditOrder = () => {
                     <button type="button" 
                     onClick={(e) => submitChanges(e)}
                     value="Add Product"
-                    className="btn btn-primary"
+                    className="btn btn-primary edit-order-submit"
                     > Submit Changes
                     </button>
                 </div>
@@ -227,4 +238,4 @@ const EditOrder = () => {
      );
 }
  
-export default EditOrder;
+export default OrderEdit;

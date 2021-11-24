@@ -9,7 +9,7 @@ const ProductSize = ({d, idx, updateDetails, addDetails}) => {
         <Row className="mb-3">
               <Form.Group as={Col}   controlId="formGridCity">
                 <Form.Label>Size (g) </Form.Label>
-                <Form.Control min={0} type="number" value={d.size} onChange={(e) => updateDetails(e.target.value, "size", idx)}/>
+                <Form.Control type="text" value={d.size} onChange={(e) => updateDetails(e.target.value, "size", idx)}/>
               </Form.Group>
 
               

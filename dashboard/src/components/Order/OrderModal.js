@@ -1,14 +1,16 @@
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button, Form} from 'react-bootstrap';
 import { useState } from 'react';
 
 
-const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
+const OrderModal = ({handleClose, isShow, products, addToCart}) => {
     const [name, setName] = useState("")
     const [currentPackage, setCurrentPackage] = useState(null)
     const [size, setSize] = useState(0)
     const [price, setPrice] = useState(0)
     const [quantity, setQuantity] = useState(1)
     const [enableOtherFields, setEnableOtherFields] = useState(true)
+
+    // const SubmitForm ()
 
     return (
         <Modal
@@ -22,12 +24,14 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+      <Form>
       <label>Name: </label>
           <div className="modal-select">
             <select
                 className="form-control"
                 id="exampleFormControlSelect1"
                 value={name}
+                required
                 onChange={(e) => {
                       setName(e.target.value)
                       const currObj = products.find(o => o.name === e.target.value);
@@ -35,7 +39,7 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
                       setEnableOtherFields(false)
                 }}
             >
-                  <option hidden >-- Select Option --</option>
+                <option hidden >-- Select Option --</option>
               {products.map((option, idx) => <option key={idx}>{option.name}</option>)}
             </select>
           </div>
@@ -46,6 +50,7 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
             <select
                 disabled={enableOtherFields}
                 className="form-control"
+                required
                 id="exampleFormControlSelect1"
                 value={size}
                 onChange={(e) => {
@@ -59,7 +64,7 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
                     }
                   }
             >
-                <option hidden >-- Select Option --</option>
+                <option hidden ></option>
                 {currentPackage && currentPackage.details.map((option, idx) => <option key={idx}>{option.size}</option>)}
             </select>
           </div>
@@ -79,6 +84,7 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
           </div>
           </div>
           </div>
+          </Form>
         </Modal.Body>
       <Modal.Footer>
         <Button onClick={(e) => {
@@ -105,4 +111,4 @@ const AddOrderModal = ({handleClose, isShow, products, addToCart}) => {
     )
 }
 
-export default AddOrderModal;
+export default OrderModal;

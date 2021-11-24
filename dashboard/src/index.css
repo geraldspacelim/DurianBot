@@ -64,13 +64,15 @@ td, tr {
 }
 
 .form-group {
-  margin: 20px 20%
+  margin: 40px 20%
 }
 
-.refreshAmountPayable {
-  margin-top: 23px;
-}
 
 .row-product{
   margin-bottom: 10px;
+}
+
+.edit-order-submit {
+  margin-top: 20px;
+  float: right;
 }
