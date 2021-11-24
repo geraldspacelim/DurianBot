@@ -57,7 +57,7 @@ const OrderEdit = () => {
         }
     }
 
-    const addToCart = (order) => {
+    const addToCart = (e, order) => {
         let tempCart = [...orders]
         tempCart.push(order)
         setOrders(tempCart)
@@ -73,7 +73,7 @@ const OrderEdit = () => {
         newPayableAmount *= (1 - (currPromo.discount/100))
         const currDelivery  = deliveryOptions.find(o => o.mode === deliveryOption);
         newPayableAmount += currDelivery.price
-        return parseFloat(newPayableAmount) 
+        return parseFloat(newPayableAmount).toFixed(2) 
     }
 
     const submitChanges = (e) => {
@@ -182,7 +182,7 @@ const OrderEdit = () => {
                         <input  type="number"
                                 readOnly
                                 className="form-control"
-                                value={amountPayable.toFixed(2)}
+                                value={amountPayable}
                                 />                        </div>
                         </div>
                         <div className="col-sm-2">
@@ -191,7 +191,10 @@ const OrderEdit = () => {
                             style={{display:'block'}}
                             type="button"
                             className="btn btn-primary refreshAmountPayable"
-                            onClick={() => {const amountPayable = calculateNewPayableAmt()}}
+                            onClick={() => {
+                                const amountPayable = calculateNewPayableAmt()
+                                setAmountPayable(amountPayable)
+                            }}
                         > <FaSyncAlt  />
                         </button>
                         </div>

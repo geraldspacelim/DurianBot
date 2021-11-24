@@ -1,7 +1,7 @@
 import { FaMinus, FaPlus } from "react-icons/fa";
 import '../../index.css'
 
-const ProductRow = ({order, idx, products, deleteOrder, handleOpen}) => {
+const ProductRow = ({order, idx, deleteOrder, handleOpen}) => {
     return (  
         
         <div className="row row-product">

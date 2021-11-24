@@ -1,7 +1,7 @@
 import {Modal, Button, Form} from 'react-bootstrap';
 import { useState } from 'react';
 import { useHistory  } from "react-router-dom";
-import ProductSize from './ProductSize';
+import ProductVariance from './ProductVariance';
 import "../../index.css"
 const axios = require('axios');
 
@@ -26,6 +26,10 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
       tempDetails.push({size: 0, price: 0})
       setDetails(tempDetails)
     }
+
+    // const saveFileInDirectory = () => {
+    //   const blob = new Blob([text])
+    // }
 
     const addProduct = (e) => {
       e.preventDefault()
@@ -69,16 +73,13 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Image Source</Form.Label>
-                <Form.Control type="text" placeholder="Enter Souce" required
-                value={source}
-                onChange={(e) => setSource(e.target.value)}
-                />
+              <Form.Label>Image Upload</Form.Label>
+              <input type="file" class="form-control-file" id="exampleFormControlFile1" required/>
             </Form.Group>
 
 
             {details.map((d, idx) => (
-              <ProductSize d={d} idx={idx} key={idx} updateDetails={updateDetails} addDetails={addDetails}/>
+              <ProductVariance d={d} idx={idx} key={idx} updateDetails={updateDetails} addDetails={addDetails}/>
             ))}
 
           <Modal.Footer/>

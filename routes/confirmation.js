@@ -1,9 +1,14 @@
+require('dotenv').config()
+const axios = require('axios');
 const router = require('express').Router();
 
 router.route('/sendConfirmationMessage').post((req, res) => {
-    Order.find()
-      .then(orders => res.json(orders))
-      .catch(err => res.status(400).json('Error: ' + err));
-  });
+    axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`, req.body).then(() => {
+        res.json("Confirmation message sent")
+    }).catch(err => {
+        console.log(err)
+    })
+});
 
 module.exports = router;
+

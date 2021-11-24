@@ -3,6 +3,8 @@ import '../../index.css'
 import { useState } from 'react';
 const axios = require('axios');
 
+const CONFIRMATION_MESSAGE = "Your Payment has been received, we are dispatching your order. If you have any queries, please contact @Kaijiunn"
+
 const OrderList = ({orders, setRequestData}) => { 
 
     const [showAlert, setShowAlert] = useState(false)
@@ -25,17 +27,22 @@ const OrderList = ({orders, setRequestData}) => {
     }
 
 
-    const paymentReceived = (e, _id) => {
+    const paymentReceived = (e, userDetails) => {
         e.stopPropagation();
         const answer = window.confirm("Would you like to mark payment as recieved?");
         if (answer) {
-            // approve
-            axios.post(`http://localhost:8080/api/v1/order/paymentReceived/${_id}`)
+            axios.post(`http://localhost:8080/api/v1/order/paymentReceived/${userDetails._id}`)
                 .then(res => {
                     setRequestData(new Date())
-                    setAlert("Payment Received!")
-                    setShowAlert(true)
-                    setTimeout(function() { setShowAlert(false) }, 2000);
+                    let data = {
+                        chat_id: userDetails.telegramId, 
+                        text: CONFIRMATION_MESSAGE
+                    }
+                    axios.post(`http://localhost:8080/api/v1/confirmation/sendConfirmationMessage`, data).then(res => {
+                        setAlert("Payment Received!")
+                        setShowAlert(true)
+                        setTimeout(function() { setShowAlert(false) }, 2000);
+                    })
                 }).catch(err => {
                     console.log(err)
                 })

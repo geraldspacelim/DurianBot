@@ -10,6 +10,7 @@ router.route('/').get((req, res) => {
 
 
 router.route('/newOrder').post((req, res) => {
+  const telegramId = req.body.telegramId
   const orderId = req.body.orderId
   const name = req.body.name;
   const contact = req.body.contact
@@ -21,6 +22,7 @@ router.route('/newOrder').post((req, res) => {
   const promoCode = req.body.promoCode
 
   const newOrder = new Order({
+    telegramId,
     orderId,
     name,
     contact,

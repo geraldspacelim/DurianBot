@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const orderSchema = new Schema({
+    telegramId: {type: Number, required: true},
     orderId: { type: String, required: true},
     name: { type: String, required: true},
     contact: {type: Number, required: true},

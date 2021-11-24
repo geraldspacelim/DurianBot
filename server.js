@@ -20,9 +20,11 @@ connection.once('open', () => {
 
 const orderRouter = require('./routes/order.js');
 const shopRouter = require('./routes/shop.js');
+const confirmationRouter = require('./routes/confirmation.js');
 
 app.use('/api/v1/order', orderRouter);
 app.use('/api/v1/shop', shopRouter);
+app.use('/api/v1/confirmation', confirmationRouter)
 
 
 app.listen(port, () => {

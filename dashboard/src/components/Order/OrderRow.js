@@ -32,7 +32,7 @@ const OrderRow = ({order, deleteRecord, paymentReceived}) => {
                         <button
                             type="button"
                             className="btn btn-success"
-                            onClick={(e) => paymentReceived(e, order._id)}
+                            onClick={(e) => paymentReceived(e, {_id: order._id, telegramId: order.telegramId})}
                         > <FaCheck />
                         </button>
                         <button

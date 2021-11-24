@@ -67,11 +67,12 @@ function send_payment_details(ctx, is_promo, promo) {
     let congratulatory_message = ""
     let finalAmountPayable = ctx.wizard.state.amountPayable + ctx.wizard.state.deliveryFee
     if (is_promo) {
-        finalAmountPayable =  ((ctx.wizard.state.amountPayable * ((100-promo.discount)/100) + ctx.wizard.state.deliveryFee)).toFixed(2) 
+        finalAmountPayable =  (ctx.wizard.state.amountPayable * ((100-promo.discount)/100)) + ctx.wizard.state.deliveryFee
         congratulatory_message = `Congrats! You are entitled to ${promo.discount}% off.`
     }
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
     const finalOrder = {
+        telegramId: ctx.from.id,
         orderId: reference_code,
         name: ctx.wizard.state.name,
         contact: parseInt(ctx.wizard.state.contact),
@@ -79,7 +80,7 @@ function send_payment_details(ctx, is_promo, promo) {
         address: ctx.wizard.state.address, 
         deliveryOption: ctx.wizard.state.deliveryOption, 
         orders: ctx.wizard.state.orders,
-        amountPayable:  parseFloat(finalAmountPayable),
+        amountPayable:  parseFloat(finalAmountPayable).toFixed(2),
         promoCode: promo === null ? "" : promo.code 
     }
     ctx.replyWithPhoto({
