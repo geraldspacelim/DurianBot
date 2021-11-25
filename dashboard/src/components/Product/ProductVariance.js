@@ -8,19 +8,22 @@ const ProductVariance = ({d, idx, updateDetails, addDetails}) => {
     return (
         <Row className="mb-3">
               <Form.Group as={Col}   controlId="formGridCity">
-                <Form.Label>Size (g) </Form.Label>
-                <Form.Control type="text" value={d.size} onChange={(e) => updateDetails(e.target.value, "size", idx)}/>
+                <Form.Control placeholder="100g" type="text" value={d.size} onChange={(e) => updateDetails(e.target.value, "size", idx)}/>
               </Form.Group>
 
               
               <Form.Group as={Col}  controlId="formGridState">
-                <Form.Label>Price ($)</Form.Label>
-                <Form.Control min={0} type="number" value={d.price} onChange={(e) => updateDetails(e.target.value, "price", idx)}/>
+                <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">$</div>
+                </div>
+                <input class="form-control" id="inlineFormInputGroupUsername2" placeholder="28" type="number" value={d.price} onChange={(e) => updateDetails(e.target.value, "price", idx)}/>
+              </div>
+                
               </Form.Group>
 
               <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>&nbsp;</Form.Label>
-                <Button style={{display:'block'}} variant="success" onClick={addDetails}> <FaPlus /></Button>
+                <Button variant="success" onClick={addDetails}> <FaPlus /></Button>
               </Form.Group>
 
             </Row>

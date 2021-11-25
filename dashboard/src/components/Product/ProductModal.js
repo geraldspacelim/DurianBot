@@ -1,4 +1,4 @@
-import {Modal, Button, Form} from 'react-bootstrap';
+import {Modal, Button, Form, Row, Col} from 'react-bootstrap';
 import { useState } from 'react';
 import { useHistory  } from "react-router-dom";
 import ProductVariance from './ProductVariance';
@@ -7,8 +7,9 @@ const axios = require('axios');
 
 const AddProductModal = ({handleClose, isShow, _id}) => {
     const [name, setName] = useState("")
-    const [details, setDetails] = useState([{size: 0, price: 0}])
+    const [details, setDetails] = useState([{size: "", price: ""}])
     const [source, setSource] = useState("")
+    const [caption, setCaption] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory ();
 
@@ -27,23 +28,23 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
       setDetails(tempDetails)
     }
 
-    // const saveFileInDirectory = () => {
-    //   const blob = new Blob([text])
-    // }
-
     const addProduct = (e) => {
       e.preventDefault()
       if (window.confirm('Confirm add new product?')) {
         setIsLoading(true)
-        const body = {
-          name: name,
-          caption: name,
-          source, source,
-          details: details
-        }
-        axios.post("http://localhost:8080/api/v1/shop/newProductCollection/" + _id, body).then(res => {
+        let formData = new FormData(); 
+        formData.append("name", name)
+        formData.append("caption", caption)
+        formData.append("file", source, source.name)
+        formData.append("details", details)
+
+        axios.post("http://localhost:8080/api/v1/shop/newProductCollection/" + _id, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
           setIsLoading(true)
-          history.push ('/productHome')
+          handleClose()
         }).catch(err  => {
           console.log(err)
         })  
@@ -73,25 +74,46 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Image Upload</Form.Label>
-              <input type="file" class="form-control-file" id="exampleFormControlFile1" required/>
+                <Form.Label>Product Caption</Form.Label>
+                <Form.Control type="text" placeholder="Enter Caption" required 
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                />
             </Form.Group>
 
+            <Form.Group className="mb-3">
+              <Form.Label>Image Upload</Form.Label>
+              <input type="file" class="form-control-file" id="exampleFormControlFile1" required onChange={(e) => setSource(e.target.files[0])}/>
+            </Form.Group>
+
+            <Row className="mb-3">
+              <Form.Group as={Col}  controlId="formGridState">
+                <Form.Label>Size</Form.Label>
+              </Form.Group>
+              <Form.Group as={Col}  controlId="formGridState">
+                <Form.Label>Price</Form.Label>
+              </Form.Group>
+              <Form.Group as={Col}  controlId="formGridState">
+              </Form.Group>
+            </Row>
 
             {details.map((d, idx) => (
               <ProductVariance d={d} idx={idx} key={idx} updateDetails={updateDetails} addDetails={addDetails}/>
             ))}
 
           <Modal.Footer/>
-          <Button variant="danger" onClick={(e) => {
-                setName("")
-                setSource("")
-                setDetails([{size: 0, price: 0}])
-                handleClose()
-              }}>Close</Button>
-              <Button variant="primary" type="submit" disabled={isLoading} >
-                Submit
-              </Button>
+              <div className="edit-submit">
+                <Button variant="danger" onClick={(e) => {
+                  setName("")
+                  setSource("")
+                  setDetails([{size: 0, price: 0}])
+                  handleClose()
+                }}>Close</Button>
+                <Button variant="primary" type="submit" disabled={isLoading} >
+                  Submit
+                </Button>
+              </div>
+              
           </Form>
         </Modal.Body>
        

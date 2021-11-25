@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const multer  = require('multer')
 
 let Shop = require("../models/shop.model")
 
@@ -32,10 +33,27 @@ router.route('/deleteProductCollection/:id').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-router.route('/newProductCollection/:id').post((req, res) => {
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "./images")
+    },
+    filename: function  (req, file, cb) {
+        cb(null, file.originalname + "-" + Date.now())
+    }  
+})
+const upload = multer({ storage: storage })
+
+router.route('/newProductCollection/:id').post(upload.single("image"), (req, res) => {
+    res.send("File upload success")
+    const body = {
+        name: req.body.name,
+        caption: req.body.caption,
+        source: req.file.filename,
+        details: req.body.details
+    }
     Shop.findByIdAndUpdate(
         {_id: req.params.id},
-        {$push: {products: req.body}}
+        {$push: {products: body}}
     ).then(() => res.json("Shop updated!"))
     .catch(err => res.status(400).json('Error: ' + err));
 })
