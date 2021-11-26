@@ -15,13 +15,14 @@ function App() {
 
   useEffect(() => {
     setIsloggedin(sessionStorage.getItem("isLoggedIn"))
-  })
+  }, [])
 
-  const Login = details => {
+  const login = details => {
     setIsLoading(true)
-    axios.post("http://localhost:8080/api/v1/login/login",  JSON.stringify(details), {
+    axios.post("http://localhost:8080/api/v1/login/authenticate",  details, {
       "Content-Type": "application/json"
     }).then(res => {
+      console.log(res.status)
       setIsLoading(false);
       if (res.status == 400) {
         alert("Wrong Credentials")
@@ -29,16 +30,14 @@ function App() {
        sessionStorage.setItem("isLoggedIn", true);
        setIsloggedin(true)
       }
+    }).catch(err => {
+      alert("Wrong Credentials")
     })
   }
 
-  const Logout = () => {
-    console.log("Logout")
-  }
-
-
   return (
     <>
+      <div className="loader" hidden={!isLoading}></div>
       {isLoggedIn ? 
             <Router>
               <div className="Container">
@@ -51,7 +50,7 @@ function App() {
 
                 </Switch>
               </div>
-            </Router>  :  <LoginHome login={Login}/>
+            </Router>  :  <LoginHome login={login}/>
           }
     </>
     

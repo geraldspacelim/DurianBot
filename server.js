@@ -21,11 +21,12 @@ connection.once('open', () => {
 const orderRouter = require('./routes/order.js');
 const shopRouter = require('./routes/shop.js');
 const confirmationRouter = require('./routes/confirmation.js');
+const loginRouter = require('./routes/login.js');
 
 app.use('/api/v1/order', orderRouter);
 app.use('/api/v1/shop', shopRouter);
 app.use('/api/v1/confirmation', confirmationRouter)
-
+app.use('/api/v1/login', loginRouter)
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)

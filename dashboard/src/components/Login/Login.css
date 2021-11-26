@@ -1,6 +1,15 @@
-.home {
-    background-image: url('./assets/bg.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center; 
+.container {
+    text-align: center;
+    padding-top: 10vh;
+}
+
+
+.login-form {
+    padding-left: 300px;
+    padding-right: 300px;
+}
+
+#submitAuthBtn {
+    margin-top: 30px;
+    width: 100px;
 }

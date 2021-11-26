@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
-// import Background from './assets/bg.png'
+import Background from './assets/bg.png'
 import "./Login.css"
 
-const LoginForm = ({Login}) => {
+const LoginForm = ({login}) => {
 
     const [details, setDetails] = useState({username: "", password: ""} )
 
     const submitHandler = e => {
         e.preventDefault(); 
         setDetails({username:"", password:""})
-        Login(details)
+        login(details)
     }
     
     return (  
-        <div className="home">
-            {/* <img src={Background} alt="mofun logo" id="smellyStoryLogo" /> */}
+        <div className="container">
+            <img src={Background} alt="mofun logo" id="smellyStoryLogo" />
             <form onSubmit={submitHandler} className="login-form">
                 <div className="form-group">
-                    <input required type="text" className="form-control" id="inputUsername" placeholder="Enter Username" onChange={e => setDetails({...details, username:e.target.value})} value={details.username}/>
+                    <input required type="text" className="form-control" id="inputUsername" placeholder="Username" onChange={e => setDetails({...details, username:e.target.value})} value={details.username}/>
                 </div>
                 <div className="form-group">
                     <input required type="password" className="form-control" id="inputPassword" placeholder="Password" onChange={e => setDetails({...details, password:e.target.value})} value={details.password}/>
