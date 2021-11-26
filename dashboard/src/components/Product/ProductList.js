@@ -45,7 +45,7 @@ const PackageList  = ({products, setRequestData, _id}) => {
                 {alert}
             </div>}
             <AddProductModal handleClose={handleClose} isShow={show} products={products} _id={_id}/>
-            <table className="table table-dark table-hover table-sm">
+            <table className="table table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Name</th>

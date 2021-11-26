@@ -54,7 +54,7 @@ const OrderList = ({orders, setRequestData}) => {
             {showAlert && <div className="alert alert-primary" role="alert">
                 {alert}
             </div>}
-             <table className="table table-dark table-hover table-sm">
+             <table className="table table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Order ID</th>

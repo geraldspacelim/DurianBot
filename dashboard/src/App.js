@@ -4,21 +4,57 @@ import OrderHome from './components/Order/OrderHome'
 import ProductHome from './components/Product/ProductHome'
 import OrderEdit from './components/Order/OrderEdit';
 import PromoHome from './components/Promo/PromoHome';
+import LoginHome from './components/Login/LoginHome'
+import { useState, useEffect } from 'react';
+const axios = require('axios');
 
 function App() {
-  return (
-    <Router>
-      <div className="Container">
-      <Navbar/>
-        <Switch>
-          <Route path="/" exact component={OrderHome}/>
-          <Route path="/editOrder/:id" component={OrderEdit} />
-          <Route path="/productHome" exact component={ProductHome}/>
-          <Route path="/promoHome" exact component={PromoHome}/>
 
-        </Switch>
-      </div>
-    </Router>  
+  const [isLoggedIn, setIsloggedin] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setIsloggedin(sessionStorage.getItem("isLoggedIn"))
+  })
+
+  const Login = details => {
+    setIsLoading(true)
+    axios.post("http://localhost:8080/api/v1/login/login",  JSON.stringify(details), {
+      "Content-Type": "application/json"
+    }).then(res => {
+      setIsLoading(false);
+      if (res.status == 400) {
+        alert("Wrong Credentials")
+      } else {
+       sessionStorage.setItem("isLoggedIn", true);
+       setIsloggedin(true)
+      }
+    })
+  }
+
+  const Logout = () => {
+    console.log("Logout")
+  }
+
+
+  return (
+    <>
+      {isLoggedIn ? 
+            <Router>
+              <div className="Container">
+              <Navbar/>
+                <Switch>
+                  <Route path="/" exact component={OrderHome}/>
+                  <Route path="/editOrder/:id" component={OrderEdit} />
+                  <Route path="/productHome" exact component={ProductHome}/>
+                  <Route path="/promoHome" exact component={PromoHome}/>
+
+                </Switch>
+              </div>
+            </Router>  :  <LoginHome login={Login}/>
+          }
+    </>
+    
   );
 }
 

@@ -45,7 +45,7 @@ const PromoList  = ({promos, setRequestData, _id}) => {
                 {alert}
             </div>}
             <PromoModal handleClose={handleClose} isShow={show} _id={_id}/>
-            <table className="table table-dark table-hover table-sm">
+            <table className="table table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Code</th>
