@@ -84,7 +84,7 @@ function send_payment_details(ctx, is_promo, promo) {
         promoCode: promo === null ? "" : promo.code 
     }
     ctx.replyWithPhoto({
-        source: "../../images/paylah.jpg"
+        source: "./assets/paylah.jpg"
     }, {
         caption: `${congratulatory_message}Simple make a payment of $${finalAmountPayable} to the following account with the following reference_code: ${reference_code}\n\nUpon successful payment, you will receive a telegram notification from us. If you have any queries, please feel free to contact me at @Kaijiunn.\n\nWould you like to order again?`,
         reply_markup: {

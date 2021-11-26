@@ -1,6 +1,7 @@
 function createMediaGroup(packagesData) {
     let mediaGroup = []
     packagesData.map(package => {
+        console.log(package.source)
         mediaGroup.push({
             type: "photo", 
             media: {source: package.source},

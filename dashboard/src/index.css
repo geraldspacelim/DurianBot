@@ -5,7 +5,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
 }
 
 code {
@@ -64,9 +63,7 @@ td, tr {
   border-radius:0px
 }
 
-.form-group {
-  margin: 40px 20%
-}
+
 
 
 .row-product{
