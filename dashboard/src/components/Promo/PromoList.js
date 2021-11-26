@@ -25,8 +25,14 @@ const PromoList  = ({promos, setRequestData, _id}) => {
         }
     }
 
-    const handleClose = () => {
+    const handleClose = (isEdit) => {
         setShow(false)
+        if (isEdit) {
+            setRequestData(new Date())
+            setShowAlert(true)
+            setAlert("Promo Added")
+            setTimeout(function() { setShowAlert(false) }, 2000);
+        } 
     }
 
     const handleOpen = () => {
@@ -39,7 +45,7 @@ const PromoList  = ({promos, setRequestData, _id}) => {
                 {alert}
             </div>}
             <PromoModal handleClose={handleClose} isShow={show} _id={_id}/>
-            <table className="table table-hover">
+            <table className="table table-dark table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Code</th>

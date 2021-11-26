@@ -24,7 +24,7 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
 
     const addDetails = () => {
       let tempDetails = [...details]
-      tempDetails.push({size: 0, price: 0})
+      tempDetails.push({size: "", price: ""})
       setDetails(tempDetails)
     }
 
@@ -35,16 +35,16 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
         let formData = new FormData(); 
         formData.append("name", name)
         formData.append("caption", caption)
-        formData.append("file", source, source.name)
-        formData.append("details", details)
+        formData.append("image", source)
+        formData.append("details", JSON.stringify(details))
 
         axios.post("http://localhost:8080/api/v1/shop/newProductCollection/" + _id, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
           }
         }).then(res => {
           setIsLoading(true)
-          handleClose()
+          handleClose(true)
         }).catch(err  => {
           console.log(err)
         })  
@@ -83,7 +83,7 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
 
             <Form.Group className="mb-3">
               <Form.Label>Image Upload</Form.Label>
-              <input type="file" class="form-control-file" id="exampleFormControlFile1" required onChange={(e) => setSource(e.target.files[0])}/>
+              <input required type="file" class="form-control-file" id="exampleFormControlFile1" required onChange={(e) => setSource(e.target.files[0])}/>
             </Form.Group>
 
             <Row className="mb-3">
@@ -105,9 +105,10 @@ const AddProductModal = ({handleClose, isShow, _id}) => {
               <div className="edit-submit">
                 <Button variant="danger" onClick={(e) => {
                   setName("")
+                  setCaption("")
                   setSource("")
-                  setDetails([{size: 0, price: 0}])
-                  handleClose()
+                  setDetails([{size: "", price: ""}])
+                  handleClose(false)
                 }}>Close</Button>
                 <Button variant="primary" type="submit" disabled={isLoading} >
                   Submit

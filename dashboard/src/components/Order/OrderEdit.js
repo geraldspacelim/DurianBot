@@ -140,7 +140,8 @@ const OrderEdit = () => {
                     <div className="row">
                     <div className="col"> 
                         <label>Email: </label>
-                        <input  type="email"
+                        <input
+                            type="email"
                             required
                             className="form-control"
                             value={email}

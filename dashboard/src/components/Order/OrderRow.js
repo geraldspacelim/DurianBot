@@ -22,7 +22,6 @@ const OrderRow = ({order, deleteRecord, paymentReceived}) => {
                 <td className="col-md-1">{order.contact}</td>
                 <td className="col-md-1">{order.address}</td>
                 <td className="col-md-1">{order.deliveryOption.split(" ")[0]}</td>
-                <td className="col-md-1">{order.promoCode}</td>
                 <td className="col-md-1">${order.amountPayable}</td>
                 <td className="col-md-1">{convertDatetime(order.createdAt.toLocaleString())}</td>
                 <td className="col-md-1">

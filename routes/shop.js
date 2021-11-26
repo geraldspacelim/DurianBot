@@ -44,13 +44,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.route('/newProductCollection/:id').post(upload.single("image"), (req, res) => {
-    res.send("File upload success")
     const body = {
         name: req.body.name,
         caption: req.body.caption,
-        source: req.file.filename,
-        details: req.body.details
+        source: "../../images/" + req.file.filename,
+        details: JSON.parse(req.body.details)
     }
+    console.log(body)
     Shop.findByIdAndUpdate(
         {_id: req.params.id},
         {$push: {products: body}}

@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const PromoModal = ({handleClose, isShow, _id}) => {
     const [code, setCode] = useState("")
-    const [discount, setDiscount] = useState(0)
+    const [discount, setDiscount] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const history = useHistory ();
 
@@ -20,7 +20,7 @@ const PromoModal = ({handleClose, isShow, _id}) => {
         }
         axios.post("http://localhost:8080/api/v1/shop/addPromo/" + _id, body).then(res => {
           setIsLoading(true)
-          history.push ('/promoHome')
+          handleClose(true)
         }).catch(err  => {
           console.log(err)
         })  
@@ -51,7 +51,7 @@ const PromoModal = ({handleClose, isShow, _id}) => {
               <Form.Group as={Col}  controlId="formGridState">
               <Form.Label>Discount</Form.Label>
               <div className="input-group mb-3">
-                <input type="number" className="form-control" min={0} aria-label="Recipient's username" aria-describedby="basic-addon2" value={discount} onChange={(e) => setDiscount(e.target.value)}/>
+                <input type="number" className="form-control" placeholder="0" aria-label="Recipient's username" aria-describedby="basic-addon2" value={discount} onChange={(e) => setDiscount(e.target.value)}/>
                 <div className="input-group-append">
                     <span className="input-group-text" id="basic-addon2">%</span>
             </div>
@@ -62,14 +62,17 @@ const PromoModal = ({handleClose, isShow, _id}) => {
             </Form.Group>
 
           <Modal.Footer/>
+          <div className="edit-submit">
           <Button variant="danger" onClick={(e) => {
                 setCode("")
                 setDiscount(0)
-                handleClose()
+                handleClose(false)
               }}>Close</Button>
               <Button variant="primary" type="submit" disabled={isLoading} >
                 Submit
               </Button>
+          </div>
+          
           </Form>
         </Modal.Body>
        

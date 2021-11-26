@@ -25,8 +25,14 @@ const PackageList  = ({products, setRequestData, _id}) => {
         }
     }
 
-    const handleClose = () => {
+    const handleClose = (isEdit) => {
         setShow(false)
+        if (isEdit) {
+            setRequestData(new Date())
+            setShowAlert(true)
+            setAlert("Product Added")
+            setTimeout(function() { setShowAlert(false) }, 2000);
+        } 
     }
 
     const handleOpen = () => {
@@ -39,7 +45,7 @@ const PackageList  = ({products, setRequestData, _id}) => {
                 {alert}
             </div>}
             <AddProductModal handleClose={handleClose} isShow={show} products={products} _id={_id}/>
-            <table className="table table-hover">
+            <table className="table table-dark table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Name</th>

@@ -54,7 +54,7 @@ const OrderList = ({orders, setRequestData}) => {
             {showAlert && <div className="alert alert-primary" role="alert">
                 {alert}
             </div>}
-             <table className="table table-hover">
+             <table className="table table-dark table-hover table-sm">
                 <thead className="thead-light">
                     <tr>
                     <th>Order ID</th>
@@ -62,9 +62,8 @@ const OrderList = ({orders, setRequestData}) => {
                     <th>Contact</th>
                     <th>Address</th> 
                     <th>Delivery Option</th>
-                    <th>Promo Code</th>
                     <th>Amount Payable</th>
-                    <th>Created At</th>
+                    <th>Ordered At</th>
                     <th>Status</th>
                     <th>Actions</th>
                     </tr>
