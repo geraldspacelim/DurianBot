@@ -35,10 +35,10 @@ router.route('/deleteProductCollection/:id').post((req, res) => {
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "../client/assets")
+        cb(null, "./client/assets")
     },
     filename: function  (req, file, cb) {
-        cb(null, file.originalname + "-" + Date.now())
+        cb(null, file.originalname)
     }  
 })
 const upload = multer({ storage: storage })
@@ -47,7 +47,7 @@ router.route('/newProductCollection/:id').post(upload.single("image"), (req, res
     const body = {
         name: req.body.name,
         caption: req.body.caption,
-        source: "../../images/" + req.file.filename,
+        source: "./assets/" + req.file.filename,
         details: JSON.parse(req.body.details)
     }
     console.log(body)

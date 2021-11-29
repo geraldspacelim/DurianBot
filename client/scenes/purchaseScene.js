@@ -150,7 +150,7 @@ step10.hears(RADIO_TYPES, async ctx => {
     const is_promo = false
     const finalOrder =  send_payment_details(ctx, is_promo, null)
     await submitOrder(finalOrder)
-    return ctx.wizard.selectStep(12);
+    return ctx.wizard.selectStep(11);
 })
 
 const step11 = new Composer() 
