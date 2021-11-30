@@ -34,7 +34,7 @@ step2.on("text", ctx => {
             return ctx.wizard.selectStep(3);
         }
         const keyboardGroup = createKeyboardGroup(packageObj.details, "size")
-        ctx.reply("Please choose a size (g)", {
+        ctx.reply("Please choose a size (g)", { // Package Size Message
             reply_markup: {
                 keyboard: keyboardGroup,
                 resize_keyboard: true,
@@ -66,7 +66,7 @@ step4.hears(QTY_TYPES, ctx => {
         additionalOrder(ctx)
         return ctx.wizard.selectStep(13);
     } else {
-        ctx.reply("How many you want?")
+        ctx.reply("How many you want?") // Select Custom Quantity Message
         return ctx.wizard.selectStep(12);
     }
 })
@@ -76,7 +76,7 @@ const step5 = new Composer()
 step5.on('text', ctx => {
     ctx.wizard.state.name = ctx.message.text
     const keyboardGroup = createKeyboardGroup(DELIVERY_TYPES, null)
-    ctx.reply("Please choose a delivery option", {
+    ctx.reply("Please choose a delivery option", { // Select Delivery Option Message
         reply_markup: {
             keyboard: keyboardGroup,
             resize_keyboard: true,
@@ -96,7 +96,7 @@ step6.hears(DELIVERY_TYPES, ctx => {
     } else {
         ctx.wizard.state.deliveryFee = 13.5
     }
-    ctx.reply("what is your contact number?")
+    ctx.reply("what is your contact number?") // Contact Number Message
     return ctx.wizard.next()
 })
 
@@ -107,12 +107,12 @@ step7.on("text", ctx => {
     if (!contactRegex.test(ctx.message.text)) {
         const currentStepIndex = ctx.wizard.cursor;
         ctx.reply(
-          "Please enter a valid contact number."
+          "Please enter a valid contact number." // Valid Contact Number Message
         );
         return ctx.wizard.selectStep(currentStepIndex);
     }
     ctx.wizard.state.contact = ctx.message.text
-    ctx.reply("What is your email?")
+    ctx.reply("What is your email?")  // Email Message
     return ctx.wizard.next();
 })
 
@@ -123,12 +123,12 @@ step8.on("text", ctx => {
     if (!emailRegex.test(ctx.message.text)) {
         const currentStepIndex = ctx.wizard.cursor;
         ctx.reply(
-          "Please enter a valid email address."
+          "Please enter a valid email address." // Valid Email Message
         );
         return ctx.wizard.selectStep(currentStepIndex);
     }
     ctx.wizard.state.email = ctx.message.text
-    ctx.reply("What is your address?")
+    ctx.reply("What is your address?") // Address Message
     return ctx.wizard.next();
 })
 
@@ -144,7 +144,7 @@ const step10 = new Composer()
 
 step10.hears(RADIO_TYPES, async ctx => {
     if (ctx.match === "Yes" ) {
-        ctx.reply("Please enter your promo code")
+        ctx.reply("Please enter your promo code") // Promo Code Message
         return ctx.wizard.next()
     } 
     const is_promo = false
@@ -163,7 +163,7 @@ step11.on("text", async ctx => {
         await submitOrder(finalOrder)
         return ctx.wizard.next();
     } 
-    ctx.reply("Wrong Promo Code").then((_) => {
+    ctx.reply("Wrong Promo Code").then((_) => { // Wrong Promo Code Message
         send_order_summary(ctx)
         return ctx.wizard.selectStep(9);
     }) 
@@ -177,7 +177,7 @@ step12.hears(RADIO_TYPES,  ctx => {
         send_start_message(ctx)
         return ctx.wizard.selectStep(1);
     }
-    ctx.reply(`Thank you ${ctx.wizard.state.name} for using durian bot. If you have anything just pm me @Kaijiunn`)
+    ctx.reply(`Thank you ${ctx.wizard.state.name} for using durian bot. If you have anything just pm me @Kaijiunn`) // Thank you Message
     return ctx.scene.leave() 
 })
 
@@ -187,7 +187,7 @@ step13.on("text", ctx => {
     if (isNaN(ctx.message.text)) {
         const currentStepIndex = ctx.wizard.cursor;
         ctx.reply(
-          "Please enter a valid number."
+          "Please enter a valid number." // Valid Number Message
         );
         return ctx.wizard.selectStep(currentStepIndex);
     }
@@ -204,7 +204,7 @@ step14.hears(RADIO_TYPES, ctx => {
         send_start_message(ctx, ctx.wizard.state.packages)
         return ctx.wizard.selectStep(1);
     }
-    ctx.reply("I need some information from you. What is your name?")
+    ctx.reply("I need some information from you. What is your name?") // Name Message
     return ctx.wizard.selectStep(4)
 })
 

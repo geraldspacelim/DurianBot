@@ -3,6 +3,7 @@ import '../../index.css'
 import { useState } from 'react';
 const axios = require('axios');
 
+// confirmation message
 const CONFIRMATION_MESSAGE = "Your Payment has been received, we are dispatching your order. If you have any queries, please contact @Kaijiunn"
 
 const OrderList = ({orders, setRequestData}) => { 

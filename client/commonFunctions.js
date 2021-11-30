@@ -7,7 +7,7 @@ function send_start_message(ctx, packagesData) {
     const mediaGroup = createMediaGroup(packagesData) 
     const keyboardGroup = createKeyboardGroup(packagesData, "name")
     ctx.replyWithMediaGroup(mediaGroup).then(_=> {
-            const startMessage = "Welcome to Durian Head Bot, which package you want?"
+            const startMessage = "Welcome to Durian Head Bot, which package you want?" // Welcome Message 
             ctx.reply(startMessage, {
                 reply_markup: {
                     keyboard: keyboardGroup,
@@ -22,7 +22,7 @@ function send_start_message(ctx, packagesData) {
 
 function selectQuantity(ctx) {
     const keyboardGroup = createKeyboardGroup(QTY_TYPES, null)
-    ctx.reply("Please select your quantity", {
+    ctx.reply("Please select your quantity", { // Quantity Message 
         reply_markup: {
             keyboard:keyboardGroup,
             resize_keyboard: true,
@@ -35,7 +35,7 @@ function additionalOrder(ctx) {
     const currentOrder = ctx.wizard.state.order
     ctx.wizard.state.orders.push(ctx.wizard.state.order)
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
-    ctx.reply(`You have selected:\n\nPackage: ${currentOrder.package}\nSize: ${currentOrder.size}\nQty: ${currentOrder.quantity}\n\nWould you like to order more?`, {
+    ctx.reply(`You have selected:\n\nPackage: ${currentOrder.package}\nSize: ${currentOrder.size}\nQty: ${currentOrder.quantity}\n\nWould you like to order more?`, { // Selected Package Message 
         reply_markup: {
             keyboard: keyboardGroup,
             resize_keyboard: true,
@@ -52,7 +52,7 @@ function send_order_summary(ctx) {
     const amountPayable = calculateAmountPayable(ctx.wizard.state.orders)
     ctx.wizard.state.amountPayable = amountPayable
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
-    ctx.reply(`${ctx.wizard.state.name}, please confirm the following details:\n\n${ordersMessage}Contact: ${ctx.wizard.state.contact}\nEmail: ${ctx.wizard.state.email}\nDelivery Option: ${ctx.wizard.state.deliveryOption}\nAddress: ${ctx.wizard.state.address}\nTotal Amount: $${amountPayable.toFixed(2)}\n\nDo you have a promo code?`, 
+    ctx.reply(`${ctx.wizard.state.name}, please confirm the following details:\n\n${ordersMessage}Contact: ${ctx.wizard.state.contact}\nEmail: ${ctx.wizard.state.email}\nDelivery Option: ${ctx.wizard.state.deliveryOption}\nAddress: ${ctx.wizard.state.address}\nTotal Amount: $${amountPayable.toFixed(2)}\n\nDo you have a promo code?`, // Order Summary Message
     {
         reply_markup: {
             keyboard:keyboardGroup,
@@ -68,7 +68,7 @@ function send_payment_details(ctx, is_promo, promo) {
     let finalAmountPayable = ctx.wizard.state.amountPayable + ctx.wizard.state.deliveryFee
     if (is_promo) {
         finalAmountPayable =  (ctx.wizard.state.amountPayable * ((100-promo.discount)/100)) + ctx.wizard.state.deliveryFee
-        congratulatory_message = `Congrats! You are entitled to ${promo.discount}% off.`
+        congratulatory_message = `Congrats! You are entitled to ${promo.discount}% off.` // Promo Message
     }
     const keyboardGroup = createKeyboardGroup(RADIO_TYPES, null)
     const finalOrder = {
@@ -86,7 +86,7 @@ function send_payment_details(ctx, is_promo, promo) {
     ctx.replyWithPhoto({
         source: "./assets/paylah.jpg"
     }, {
-        caption: `${congratulatory_message}Simple make a payment of $${finalAmountPayable} to the following account with the following reference_code: ${reference_code}\n\nUpon successful payment, you will receive a telegram notification from us. If you have any queries, please feel free to contact me at @Kaijiunn.\n\nWould you like to order again?`,
+        caption: `${congratulatory_message}Simple make a payment of $${finalAmountPayable} to the following account with the following reference_code: ${reference_code}\n\nUpon successful payment, you will receive a telegram notification from us. If you have any queries, please feel free to contact me at @Kaijiunn.\n\nWould you like to order again?`, // Payment Message 
         reply_markup: {
             keyboard: keyboardGroup,
             resize_keyboard: true,
@@ -97,9 +97,7 @@ function send_payment_details(ctx, is_promo, promo) {
 }
 
 async function submitOrder(finalOrder) {
-    axios.post("http://localhost:8080/api/v1/order/newOrder", finalOrder).then(res => {
-        console.log(res) 
-    }).catch(err => {
+    axios.post("http://localhost:8080/api/v1/order/newOrder", finalOrder).then( _ => {} ).catch(err => {
         console.log(err)
     })
 }
