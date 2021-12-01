@@ -13,11 +13,13 @@ router.route('/newShop').post((req, res) => {
     const name = req.body.name;
     const promos = req.body.promos
     const products = req.body.products
+    const deliveryOptions = req.body.deliveryOptions
 
     const newShop = new Shop({
     name,
     promos,
-    products
+    products,
+    deliveryOptions
     });
 
     newShop.save()
