@@ -1,6 +1,11 @@
+require('dotenv').config()
 const router = require('express').Router();
+const axios = require('axios');
 
 let Order = require('../models/order.model');
+// New order telegram message
+const ORDER_RECEIVED_MESSAGE = "You have received a new order"
+const TELEGRAM_CHANNEL = -629840517
 
 router.route('/').get((req, res) => {
     Order.find().sort({"createdAt": -1})
@@ -35,7 +40,17 @@ router.route('/newOrder').post((req, res) => {
   });
 
   newOrder.save()
-  .then(() => res.json('Order added!'))
+  .then(() => {
+    const body = {
+      chat_id: TELEGRAM_CHANNEL, 
+      text: ORDER_RECEIVED_MESSAGE
+  }
+    axios.post(`https://api.telegram.org/bot${process.env.BOT_ADMIN_TOKEN}/sendMessage`, body).then(() => {
+        res.json("New order received")   
+    }).catch (err => {
+        console.log(err)
+    })
+  })
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
