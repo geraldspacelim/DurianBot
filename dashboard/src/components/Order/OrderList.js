@@ -16,7 +16,7 @@ const OrderList = ({ orders, setRequestData }) => {
     const answer = window.confirm("Would you like to delete order?");
     if (answer) {
       axios
-        .post(`http://localhost:8080/api/v1/order/deleteOrder/${_id}`)
+        .post(`http://159.223.69.13:8080/api/v1/order/deleteOrder/${_id}`)
         .then((res) => {
           setRequestData(new Date());
           setAlert("Record deleted successfully");
@@ -39,7 +39,7 @@ const OrderList = ({ orders, setRequestData }) => {
     if (answer) {
       axios
         .post(
-          `http://localhost:8080/api/v1/order/paymentReceived/${userDetails._id}`
+          `http://159.223.69.13:8080/api/v1/order/paymentReceived/${userDetails._id}`
         )
         .then((res) => {
           setRequestData(new Date());
@@ -49,7 +49,7 @@ const OrderList = ({ orders, setRequestData }) => {
           };
           axios
             .post(
-              `http://localhost:8080/api/v1/confirmation/sendConfirmationMessage`,
+              `http://159.223.69.13:8080/api/v1/confirmation/sendConfirmationMessage`,
               data
             )
             .then((res) => {
